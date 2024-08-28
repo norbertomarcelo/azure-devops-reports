@@ -1,0 +1,31 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Microsoft/azure-pipelines-task-lib/master/tasks.schema.json",
+  "id": "573678b4-e913-4a9e-aa75-6da95c9cb27e",
+  "name": "AzureDevOpsReports",
+  "friendlyName": "Azure DevOps Reports",
+  "description": "Create a report with an overview of repositories, teams, users, work items, and other attributes.",
+  "helpMarkDown": "",
+  "category": "Utility",
+  "author": "norbertomarcelo",
+  "version": {
+    "Major": 0,
+    "Minor": 1,
+    "Patch": 0
+  },
+  "instanceNameFormat": "Echo $(samplestring)",
+  "inputs": [
+    {
+      "name": "samplestring",
+      "type": "string",
+      "label": "Sample String",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "A sample string"
+    }
+  ],
+  "execution": {
+    "Node20_1": {
+      "target": "index.js"
+    }
+  }
+}
