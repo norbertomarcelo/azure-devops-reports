@@ -12,10 +12,12 @@
   "dependencies": {
     "azure-devops-node-api": "^14.0.2",
     "azure-pipelines-task-lib": "^4.17.0",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/node": "^22.5.0",
-    "@types/q": "^1.5.8"
+    "@types/q": "^1.5.8",
+    "@types/xlsx": "^0.0.36"
   }
 }

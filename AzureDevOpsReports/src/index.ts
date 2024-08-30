@@ -1,9 +1,10 @@
 import tl = require("azure-pipelines-task-lib/task");
-import { listProjecs } from "./modules/projects";
+import { listProjecsApi } from "./modules/project/service";
 
 async function run() {
   try {
-    listProjecs();
+    let list = listProjecsApi();
+    console.log(list)
     
   } catch (err: any) {
     tl.setResult(tl.TaskResult.Failed, err.message);
