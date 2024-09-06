@@ -1,30 +1,35 @@
 import * as azdev from "azure-devops-node-api";
+import { Project } from "../modules/project/model";
 
 export class Connections {
   private token: string;
   private url: string;
   private org: string;
 
-  constructor(token: string, url: string, org: string) {
-    this.token = token;
-    this.url = url;
-    this.org = org;
+  constructor() {
+    this.token = String(process.env.AZURE_DEVOPS_ACCESS_TOKEN);
+    this.url = String(process.env.AZURE_DEVOPS_URL);
+    this.org = String(process.env.AZURE_DEVOPS_ORGANIZATION);
   }
 
-  async requestAzureDevOpsApi(endpoint: string): Promise<[]> {
+  async requestAzureDevOpsApi(endpoint: string): Promise<Project[]> {
     try {
-      let baseUrl = `${this.url}/${this.org}/${endpoint}`;
-      let headers = new Headers({
+      const baseUrl = `${this.url}/${this.org}/${endpoint}`;
+      const headers = new Headers({
         Accept: "application/json",
         Authorization: `Basic ${btoa(`:${this.token}`)}`,
       });
-      let response = await fetch(baseUrl, {
+      const response = await fetch(baseUrl, {
         method: "GET",
         headers: headers,
       });
       if (!response.ok)
         throw new Error(`HTTP error! Status: ${response.status}`);
-      return await response.json();
+
+      const data = await response.json();
+      const projects = data.value;
+
+      return projects;
     } catch (error) {
       console.error("Erro ao consumir a API:", error);
       throw error;
@@ -32,8 +37,8 @@ export class Connections {
   }
 
   getSdkConnection() {
-    let orgUrl = `${this.url}/${this.org}`;
-    let authHandler = azdev.getPersonalAccessTokenHandler(this.token);
+    const orgUrl = `${this.url}/${this.org}`;
+    const authHandler = azdev.getPersonalAccessTokenHandler(this.token);
     return new azdev.WebApi(orgUrl, authHandler);
   }
 }

@@ -4,30 +4,29 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-export async function listProjecsApi() {
-  let token = String(process.env.AZURE_DEVOPS_ACCESS_TOKEN);
-  let url = String(process.env.AZURE_DEVOPS_URL);
-  let org = String(process.env.AZURE_DEVOPS_ORGANIZATION);
-  let endpoint = "_apis/projects?api-version=5.0";
-  let connection = new Connections(token, url, org);
-  try {
-    let projectsList: Project[] = [];
-    connection.requestAzureDevOpsApi(endpoint).then((projects) => {
-      projects.forEach((project: any) => {
-        let newProject = new Project(
-          project.id,
-          project.name,
-          project.url,
-          project.state,
-          project.revision,
-          project.visibility,
-          new Date(project.lastUpdateTime)
-        );
-        projectsList.push(newProject);
+export class ProjectService {
+  async listProjecsApi() {
+    const endpoint = "_apis/projects?api-version=5.0";
+    const connection = new Connections();
+    try {
+      const projectsList: Project[] = [];
+      connection.requestAzureDevOpsApi(endpoint).then((projects) => {
+        projects.forEach((project: Project) => {
+          const newProject = new Project(
+            project.id,
+            project.name,
+            project.url,
+            project.state,
+            project.revision,
+            project.visibility,
+            new Date(project.lastUpdateTime)
+          );
+          projectsList.push(newProject);
+        });
       });
-    });
-    return projectsList;
-  } catch (err) {
-    console.error("Error fetching projects:", err);
+      return projectsList;
+    } catch (err) {
+      console.error("Error fetching projects:", err);
+    }
   }
 }
