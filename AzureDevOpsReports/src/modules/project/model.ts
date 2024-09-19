@@ -4,7 +4,7 @@ export class Project {
   url: string;
   state: string;
   revision: number;
-  visibility: number;
+  visibility: string;
   lastUpdateTime: Date;
 
   constructor(
@@ -13,7 +13,7 @@ export class Project {
     url: string,
     state: string,
     revision: number,
-    visibility: number,
+    visibility: string,
     lastUpdateTime: Date
   ) {
     this.id = id;
@@ -35,5 +35,9 @@ export class Project {
       json.visibility,
       new Date(json.lastUpdateTime)
     );
+  }
+
+  static fromJSONArray(jsonArray: any[]): Project[] {
+    return jsonArray.map((json) => Project.fromJSON(json));
   }
 }

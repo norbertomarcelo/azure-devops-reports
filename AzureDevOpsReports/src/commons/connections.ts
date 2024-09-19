@@ -1,5 +1,6 @@
-import * as azdev from "azure-devops-node-api";
-import { Project } from "../modules/project/model";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export class Connections {
   private token: string;
@@ -12,14 +13,14 @@ export class Connections {
     this.org = String(process.env.AZURE_DEVOPS_ORGANIZATION);
   }
 
-  async requestAzureDevOpsApi(endpoint: string): Promise<Project[]> {
+  async requestAzureDevOpsApi(endpoint: string): Promise<any[]> {
     try {
-      const baseUrl = `${this.url}/${this.org}/${endpoint}`;
-      const headers = new Headers({
+      const baseUrl: string = `${this.url}/${this.org}/${endpoint}`;
+      const headers: Headers = new Headers({
         Accept: "application/json",
         Authorization: `Basic ${btoa(`:${this.token}`)}`,
       });
-      const response = await fetch(baseUrl, {
+      const response: Response = await fetch(baseUrl, {
         method: "GET",
         headers: headers,
       });
@@ -34,11 +35,5 @@ export class Connections {
       console.error("Erro ao consumir a API:", error);
       throw error;
     }
-  }
-
-  getSdkConnection() {
-    const orgUrl = `${this.url}/${this.org}`;
-    const authHandler = azdev.getPersonalAccessTokenHandler(this.token);
-    return new azdev.WebApi(orgUrl, authHandler);
   }
 }
